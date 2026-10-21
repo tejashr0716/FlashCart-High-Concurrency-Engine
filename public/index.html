@@ -16,8 +16,8 @@
         extend: {
           colors: {
             brand: '#f43f5e',
-            darkbg: '#070b14',
-            cardbg: 'rgba(14, 22, 40, 0.75)',
+            darkbg: '#060a12',
+            cardbg: 'rgba(11, 19, 36, 0.75)',
             borderbg: 'rgba(255, 255, 255, 0.08)'
           },
           fontFamily: {
@@ -30,25 +30,28 @@
   </script>
   <style>
     body {
-      background-color: #070b14;
+      background-color: #060a12;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.8) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.18) 0px, transparent 45%),
+        radial-gradient(at 100% 100%, rgba(225, 29, 72, 0.12) 0px, transparent 50%),
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px;
       color: #f1f5f9;
       min-height: 100vh;
     }
     .glass-card {
-      background: rgba(14, 22, 40, 0.75);
-      backdrop-filter: blur(14px);
+      background: rgba(11, 19, 36, 0.75);
+      backdrop-filter: blur(16px);
       border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
     }
     .glass-card:hover {
-      border-color: rgba(244, 63, 94, 0.3);
+      border-color: rgba(244, 63, 94, 0.35);
     }
     .tab-btn.active {
-      background: #f43f5e;
+      background: linear-gradient(135deg, #e11d48, #f43f5e);
       color: #ffffff;
-      box-shadow: 0 4px 15px rgba(244, 63, 94, 0.35);
+      box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4);
     }
     .pulse-dot {
       animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -57,20 +60,29 @@
       0%, 100% { opacity: 1; transform: scale(1); }
       50% { opacity: 0.35; transform: scale(1.2); }
     }
+    .node-card {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .node-card:hover {
+      transform: translateY(-4px);
+      border-color: #f43f5e;
+      box-shadow: 0 12px 25px -5px rgba(244, 63, 94, 0.25);
+    }
   </style>
 </head>
 <body class="antialiased selection:bg-brand selection:text-white flex flex-col min-h-screen">
 
+  <!-- Top Header -->
   <header class="sticky top-0 z-50 glass-card border-b border-slate-800/80 px-6 py-3.5 flex items-center justify-between">
     <div class="flex items-center gap-4">
-      <a href="https://tejashr0716.github.io/" class="w-10 h-10 rounded-xl bg-rose-600 flex items-center justify-center font-bold text-white shadow-lg shadow-rose-600/30 transition hover:scale-105">
+      <a href="https://tejashr0716.github.io/" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-rose-500 flex items-center justify-center font-bold text-white shadow-lg shadow-rose-600/30 transition hover:scale-105">
         <i class="fa-solid fa-bolt text-lg"></i>
       </a>
       <div>
         <div class="flex items-center gap-2">
           <h1 class="font-extrabold text-lg text-white tracking-tight">FlashCart Commerce</h1>
-          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-rose-400 pulse-dot"></span> FLASH SALE LIVE
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1.5 font-mono">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-400 pulse-dot"></span> PROD ENGINE v2.4
           </span>
         </div>
         <p class="text-xs text-slate-400">Atomic Stock Decrement · Concurrency Gate · Zero Overselling</p>
@@ -80,20 +92,27 @@
     <!-- Center Navigation Tabs -->
     <div class="hidden md:flex items-center gap-1 bg-slate-950/80 p-1 border border-slate-800 rounded-xl text-xs font-semibold">
       <button onclick="switchTab('console')" id="tab-console" class="tab-btn active px-4 py-1.5 rounded-lg transition">
-        <i class="fa-solid fa-bag-shopping text-xs mr-1"></i> Live Drop
+        <i class="fa-solid fa-sliders text-xs mr-1"></i> Live Operations
       </button>
-      <button onclick="switchTab('stress')" id="tab-stress" class="tab-btn px-4 py-1.5 text-slate-400 hover:text-white rounded-lg transition">
-        <i class="fa-solid fa-fire text-xs mr-1"></i> 1,000 Req/s Stress Lab
+      <button onclick="switchTab('topology')" id="tab-topology" class="tab-btn px-4 py-1.5 text-slate-400 hover:text-white rounded-lg transition">
+        <i class="fa-solid fa-diagram-project text-xs mr-1"></i> System Topology
       </button>
-      <button onclick="switchTab('architecture')" id="tab-architecture" class="tab-btn px-4 py-1.5 text-slate-400 hover:text-white rounded-lg transition">
-        <i class="fa-solid fa-database text-xs mr-1"></i> Architecture
+      <button onclick="switchTab('scenarios')" id="tab-scenarios" class="tab-btn px-4 py-1.5 text-slate-400 hover:text-white rounded-lg transition">
+        <i class="fa-solid fa-vial text-xs mr-1"></i> Concurrency Labs
+      </button>
+      <button onclick="switchTab('profiler')" id="tab-profiler" class="tab-btn px-4 py-1.5 text-slate-400 hover:text-white rounded-lg transition">
+        <i class="fa-solid fa-database text-xs mr-1"></i> SQL Profiler
       </button>
       <button onclick="switchTab('devops')" id="tab-devops" class="tab-btn px-4 py-1.5 text-slate-400 hover:text-white rounded-lg transition">
-        <i class="fa-solid fa-server text-xs mr-1"></i> DevOps
+        <i class="fa-solid fa-server text-xs mr-1"></i> DevOps Specs
       </button>
     </div>
 
+    <!-- Right Actions -->
     <div class="flex items-center gap-3">
+      <button onclick="toggleAudio()" id="btn-audio" class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition" title="Toggle Sound Feedback">
+        <i class="fa-solid fa-volume-high text-xs"></i>
+      </button>
       <a href="https://github.com/tejashr0716/FlashCart-High-Concurrency-Engine" target="_blank" class="px-3.5 py-1.5 text-xs font-bold rounded-xl bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 transition flex items-center gap-1.5">
         <i class="fa-brands fa-github text-sm"></i> Source Code
       </a>
@@ -103,6 +122,7 @@
     </div>
   </header>
 
+  <!-- Main Content -->
   <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
 
     <!-- KPI Metrics -->
@@ -111,7 +131,7 @@
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Remaining Units</span>
           <div class="w-8 h-8 rounded-lg bg-rose-950/60 border border-rose-800/40 flex items-center justify-center text-rose-400">
-            <i class="fa-solid fa-cubes"></i>
+            <i class="fa-solid fa-boxes-stacked"></i>
           </div>
         </div>
         <div class="text-2xl font-black text-white font-mono" id="kpi-stock">67 / 1,000</div>
@@ -123,237 +143,533 @@
       <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Shopper Velocity</span>
-          <div class="w-8 h-8 rounded-lg bg-cyan-950/60 border border-cyan-800/40 flex items-center justify-center text-cyan-400">
+          <div class="w-8 h-8 rounded-lg bg-amber-950/60 border border-amber-800/40 flex items-center justify-center text-amber-400">
             <i class="fa-solid fa-users-rays"></i>
           </div>
         </div>
-        <div class="text-2xl font-black text-white font-mono">4,210 Concurrent</div>
-        <div class="text-xs text-cyan-400 font-semibold mt-1 flex items-center gap-1">
-          <i class="fa-solid fa-shield"></i> Rate Limiter Active
+        <div class="text-2xl font-black text-white font-mono" id="kpi-users">4,210 Concurrent</div>
+        <div class="text-xs text-amber-400 font-semibold mt-1 flex items-center gap-1">
+          <i class="fa-solid fa-shield-halved"></i> Rate Limiter Active
         </div>
       </div>
 
       <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Atomic Exec Latency</span>
-          <div class="w-8 h-8 rounded-lg bg-emerald-950/60 border border-emerald-800/40 flex items-center justify-center text-emerald-400">
-            <i class="fa-solid fa-stopwatch"></i>
+          <div class="w-8 h-8 rounded-lg bg-cyan-950/60 border border-cyan-800/40 flex items-center justify-center text-cyan-400">
+            <i class="fa-solid fa-bolt"></i>
           </div>
         </div>
         <div class="text-2xl font-black text-white font-mono">0.84ms</div>
-        <div class="text-xs text-emerald-400 font-semibold mt-1 flex items-center gap-1">
-          <i class="fa-solid fa-check"></i> Zero Overselling Guaranteed
+        <div class="text-xs text-cyan-400 font-semibold mt-1 flex items-center gap-1">
+          <i class="fa-solid fa-check-double"></i> Zero Overselling Guaranteed
         </div>
       </div>
 
       <div class="glass-card rounded-2xl p-5 relative overflow-hidden">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Gross Flash GMV</span>
-          <div class="w-8 h-8 rounded-lg bg-amber-950/60 border border-amber-800/40 flex items-center justify-center text-amber-400">
-            <i class="fa-solid fa-dollar-sign"></i>
+          <div class="w-8 h-8 rounded-lg bg-emerald-950/60 border border-emerald-800/40 flex items-center justify-center text-emerald-400">
+            <i class="fa-solid fa-cart-shopping"></i>
           </div>
         </div>
         <div class="text-2xl font-black text-white font-mono" id="kpi-gmv">$124,800</div>
-        <div class="text-xs text-amber-400 font-semibold mt-1 flex items-center gap-1">
+        <div class="text-xs text-emerald-400 font-semibold mt-1 flex items-center gap-1">
           <i class="fa-solid fa-arrow-trend-up"></i> Peak Midnight Spike
         </div>
       </div>
     </div>
 
-    <!-- TAB 1: LIVE DROP CONSOLE -->
+    <!-- TAB 1: LIVE OPERATIONS CONSOLE -->
     <div id="view-console" class="space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
+        <!-- Products Grid (2 Cols) -->
         <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-5">
-          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
             <div>
               <h2 class="text-base font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-fire text-rose-500"></i> Midnight Flash Products
+                <i class="fa-solid fa-fire-flame-curved text-rose-500"></i> Midnight Flash Deals Catalog
               </h2>
-              <p class="text-xs text-slate-400">Real-time atomic decrement via Redis Lua scripting</p>
+              <p class="text-xs text-slate-400">High-concurrency atomic stock decrement powered by Redis Lua</p>
             </div>
-            <span class="px-3 py-1 rounded-lg bg-rose-500/20 text-rose-400 font-mono text-xs font-bold">
-              ENDS IN 04:22 MINS
-            </span>
-          </div>
-
-          <div class="space-y-4">
-            <!-- Product 1 -->
-            <div class="p-4 rounded-xl border border-slate-800 bg-slate-950/40 flex flex-col md:flex-row items-center gap-4">
-              <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&q=80" class="w-full h-full object-cover">
-              </div>
-              <div class="flex-1 space-y-1.5">
-                <div class="flex items-center gap-2">
-                  <h4 class="font-bold text-sm text-white">PlayStation 5 Pro Limited Edition</h4>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30">HOT DROP</span>
-                </div>
-                <p class="text-xs text-slate-400">2TB High-Speed SSD · Liquid Metal Cooling · DualSense Wireless</p>
-                <div class="flex items-center gap-4 pt-1">
-                  <span class="text-lg font-black text-white">$699.00</span>
-                  <div class="flex-1 max-w-xs space-y-1">
-                    <div class="flex justify-between text-[10px] font-mono text-slate-400">
-                      <span>Stock: <strong class="text-white" id="p1-stock">42</strong> left</span>
-                      <span>Cap: 500</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                      <div id="p1-bar" class="bg-rose-500 h-1.5 rounded-full" style="width: 8.4%"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button onclick="flashBuy('PS5 Pro', 699, 'p1')" class="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-rose-600 hover:bg-rose-500 transition flex items-center gap-2 shadow-lg shadow-rose-600/30 shrink-0">
-                <i class="fa-solid fa-bolt"></i> Instant Buy & Lock
-              </button>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="p-4 rounded-xl border border-slate-800 bg-slate-950/40 flex flex-col md:flex-row items-center gap-4">
-              <div class="w-24 h-24 rounded-lg overflow-hidden shrink-0">
-                <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=600&q=80" class="w-full h-full object-cover">
-              </div>
-              <div class="flex-1 space-y-1.5">
-                <div class="flex items-center gap-2">
-                  <h4 class="font-bold text-sm text-white">NVIDIA GeForce RTX 5090 32GB</h4>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">EXTREME DEMAND</span>
-                </div>
-                <p class="text-xs text-slate-400">Blackwell Architecture · 32GB GDDR7 · 4th Gen Ray Tracing</p>
-                <div class="flex items-center gap-4 pt-1">
-                  <span class="text-lg font-black text-white">$1,599.00</span>
-                  <div class="flex-1 max-w-xs space-y-1">
-                    <div class="flex justify-between text-[10px] font-mono text-slate-400">
-                      <span>Stock: <strong class="text-white" id="p2-stock">7</strong> left</span>
-                      <span>Cap: 150</span>
-                    </div>
-                    <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                      <div id="p2-bar" class="bg-amber-400 h-1.5 rounded-full" style="width: 4.6%"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <button onclick="flashBuy('RTX 5090', 1599, 'p2')" class="px-5 py-2.5 rounded-xl font-bold text-xs text-white bg-rose-600 hover:bg-rose-500 transition flex items-center gap-2 shadow-lg shadow-rose-600/30 shrink-0">
-                <i class="fa-solid fa-bolt"></i> Instant Buy & Lock
-              </button>
+            <!-- Flash Countdown -->
+            <div class="flex items-center gap-2 bg-rose-950/50 px-3 py-1.5 border border-rose-800/50 rounded-xl text-xs font-mono text-rose-300">
+              <i class="fa-solid fa-clock pulse-dot text-rose-400"></i>
+              <span>DEALS END IN: <strong class="text-white font-bold" id="flash-clock">01:42:19</strong></span>
             </div>
           </div>
+
+          <!-- Items Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="products-container"></div>
         </div>
 
-        <!-- Real-Time Orders Stream -->
+        <!-- Real-Time Audit Ledger & Velocity Monitor (1 Col) -->
         <div class="glass-card rounded-2xl p-6 flex flex-col h-full space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-terminal text-cyan-400"></i> Checkout Ingestion Feed
+              <i class="fa-solid fa-terminal text-cyan-400"></i> Atomic Order Stream
             </h3>
-            <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-dot"></span>
+            <span class="w-2 h-2 rounded-full bg-rose-400 pulse-dot"></span>
           </div>
 
           <div id="event-stream" class="flex-1 space-y-2 overflow-y-auto max-h-[460px] font-mono text-xs pr-1">
             <div class="p-2.5 rounded-xl bg-slate-950/70 border border-slate-800/80 text-slate-300">
-              <span class="text-slate-500 text-[10px] block">15:40:02.102</span>
-              <span class="text-emerald-400 font-bold">[REDIS_DECR]</span> Atomic stock decrement verified. Lock 0.8ms.
+              <span class="text-slate-500 text-[10px] block">15:52:10</span>
+              <span class="text-rose-400 font-bold">[REDIS_LUA]</span> In-memory Lua engine active. decr_if_available.lua loaded.
             </div>
+          </div>
+
+          <!-- Checkout Velocity Simulation -->
+          <div class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 space-y-2 text-xs">
+            <div class="flex items-center justify-between text-slate-400">
+              <span>Traffic Surge Simulator:</span>
+              <span class="font-mono text-rose-400 font-bold" id="surge-rate-label">4,210 req/s</span>
+            </div>
+            <input type="range" min="1000" max="15000" value="4210" step="500" id="surge-slider" oninput="updateSurgeSlider(this.value)" class="w-full accent-rose-500 cursor-pointer">
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- TAB 2: STRESS LAB -->
-    <div id="view-stress" class="hidden space-y-6">
+    <!-- TAB 2: SYSTEM TOPOLOGY (INTERACTIVE NODE GRAPH) -->
+    <div id="view-topology" class="hidden space-y-6">
       <div class="glass-card rounded-2xl p-6 space-y-6">
         <div>
           <h2 class="text-lg font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-fire text-rose-500"></i> 1,000 Burst Order Concurrency Simulator
+            <i class="fa-solid fa-diagram-project text-rose-500"></i> End-to-End High-Throughput Topology
           </h2>
-          <p class="text-xs text-slate-400">Simulate 1,000 bots and users hitting the checkout API simultaneously. Watch how Redis Lua prevents overselling.</p>
+          <p class="text-xs text-slate-400">Click any system component below to inspect its operational metrics, protocols, and failover behavior.</p>
         </div>
 
-        <div class="p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
-          <button onclick="runBurstSimulation()" class="px-6 py-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm shadow-xl shadow-rose-600/30 flex items-center gap-2">
-            <i class="fa-solid fa-bolt"></i> Fire 1,000 Simultaneous Checkout Requests
-          </button>
-          <div id="burst-results" class="font-mono text-xs text-slate-300 space-y-1.5">
-            Click above to launch a simulated 1,000-request concurrency surge.
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <!-- Node 1 -->
+          <div onclick="inspectNode('edge')" class="node-card cursor-pointer p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider font-mono">Edge Tier</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            </div>
+            <h4 class="font-bold text-white text-sm">Cloudflare DDoS Shield</h4>
+            <p class="text-xs text-slate-400">Anycast DNS, TCP SYN flood mitigation, Bot Management scoring.</p>
+            <div class="text-[10px] text-slate-500 font-mono">Edge CDN · 250+ PoPs Globally</div>
+          </div>
+
+          <!-- Node 2 -->
+          <div onclick="inspectNode('gateway')" class="node-card cursor-pointer p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider font-mono">Traffic Ingress</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            </div>
+            <h4 class="font-bold text-white text-sm">Nginx Concurrency Gateway</h4>
+            <p class="text-xs text-slate-400">Token bucket rate limiting, HTTP/2 multiplexing, keepalive pools.</p>
+            <div class="text-[10px] text-slate-500 font-mono">Port 443 · Rate Zone 500r/s</div>
+          </div>
+
+          <!-- Node 3 -->
+          <div onclick="inspectNode('lua')" class="node-card cursor-pointer p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-rose-400 uppercase tracking-wider font-mono">Stock Mutex</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            </div>
+            <h4 class="font-bold text-white text-sm">Redis 7 Lua Script Engine</h4>
+            <p class="text-xs text-slate-400">Atomic DECR with zero over-allocation guarantee. 0.8ms resolution.</p>
+            <div class="text-[10px] text-slate-500 font-mono">Port 6379 · Single-Threaded Atomic</div>
+          </div>
+
+          <!-- Node 4 -->
+          <div onclick="inspectNode('kafka')" class="node-card cursor-pointer p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-amber-400 uppercase tracking-wider font-mono">Event Buffer</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            </div>
+            <h4 class="font-bold text-white text-sm">Apache Kafka Stream</h4>
+            <p class="text-xs text-slate-400">Topic 'orders.flash.v1', partitioned by user_id for ordered persistence.</p>
+            <div class="text-[10px] text-slate-500 font-mono">Port 9092 · 100k msgs/sec Buffer</div>
+          </div>
+
+          <!-- Node 5 -->
+          <div onclick="inspectNode('db')" class="node-card cursor-pointer p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider font-mono">Fulfillment DB</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            </div>
+            <h4 class="font-bold text-white text-sm">PostgreSQL 15 ACID Primary</h4>
+            <p class="text-xs text-slate-400">Async bulk worker inserts orders, customer ledger, invoice generation.</p>
+            <div class="text-[10px] text-slate-500 font-mono">Port 5432 · Batch Commits (100 rows)</div>
+          </div>
+
+          <!-- Node 6 -->
+          <div onclick="inspectNode('backup')" class="node-card cursor-pointer p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-purple-400 uppercase tracking-wider font-mono">Disaster Recovery</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            </div>
+            <h4 class="font-bold text-white text-sm">AES-256 WAL Archiver</h4>
+            <p class="text-xs text-slate-400">Continuous WAL streaming, AES-256 S3 bucket sync, verified drill test.</p>
+            <div class="text-[10px] text-slate-500 font-mono">Point-In-Time (PITR) Enabled</div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- TAB 3: ARCHITECTURE -->
-    <div id="view-architecture" class="hidden space-y-6">
-      <div class="glass-card rounded-2xl p-6 space-y-6">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-database text-rose-400"></i> High-Throughput Write-Behind Architecture
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto"><code>-- Redis Atomic Lua Script (decr_if_available.lua)
-local stock_key = KEYS[1]
-local requested = tonumber(ARGV[1])
-local current = tonumber(redis.call('get', stock_key) or 0)
-
-if current >= requested then
-    redis.call('decrby', stock_key, requested)
-    return 1 -- Order Accepted
-else
-    return 0 -- Sold Out (Atomic Rejection)
-end</code></pre>
-          <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto"><code>// Asynchronous Write-Behind Queue
-async function queueOrderToPostgres(orderPayload) {
-  // 1. Stock already decremented in Redis in 0.8ms
-  // 2. Publish order to Kafka / RabbitMQ queue
-  await queue.publish('flash_orders', orderPayload);
-  // 3. PostgreSQL writes happen asynchronously in batches
-  return { status: 'COMMITTED', txId: orderPayload.id };
-}</code></pre>
+        <div id="node-inspector" class="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-300">
+          <span class="text-rose-400 font-bold uppercase tracking-wider text-[11px] block mb-1">Topology Node Inspector:</span>
+          Click any architecture node above to reveal its high-availability configuration and live telemetry.
         </div>
       </div>
     </div>
 
-    <!-- TAB 4: DEVOPS -->
+    <!-- TAB 3: CONCURRENCY LABS (SCENARIOS) -->
+    <div id="view-scenarios" class="hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-vial text-rose-500"></i> Concurrency Stress & Overselling Prevention Lab
+          </h2>
+          <p class="text-xs text-slate-400">Simulate race conditions, evaluate Lua vs SQL locking, and test over-subscription edge cases.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-3">
+            <h4 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-bolt text-rose-400"></i> Over-subscription Race
+            </h4>
+            <p class="text-xs text-slate-400">Simulates 100 shoppers attempting to purchase when exactly 1 unit remains in stock.</p>
+            <button onclick="simulateOversellingRace()" class="w-full py-2 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-500/30 text-xs font-bold transition">
+              Simulate 100 Concurrent Orders
+            </button>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-3">
+            <h4 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-arrow-rotate-right text-emerald-400"></i> Instant Inventory Restock
+            </h4>
+            <p class="text-xs text-slate-400">Admin restocks 50 units atomically into Redis memory cache, resetting inventory flags.</p>
+            <button onclick="simulateRestock()" class="w-full py-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-500/30 text-xs font-bold transition">
+              Inject 50 Stock Units
+            </button>
+          </div>
+
+          <div class="p-4 rounded-xl border border-slate-800 bg-slate-950/60 space-y-3">
+            <h4 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-fire text-amber-400"></i> Black Friday 50k Surge
+            </h4>
+            <p class="text-xs text-slate-400">Fires 50,000 requests to test Nginx leaky-bucket rate limiting and circuit breakers.</p>
+            <button onclick="simulateBlackFridaySurge()" class="w-full py-2 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/40 hover:bg-amber-500/30 text-xs font-bold transition">
+              Trigger 50k Spike
+            </button>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 font-mono text-xs space-y-2">
+          <div class="text-slate-400 font-bold uppercase tracking-wider text-[11px]">Lab Execution Trace:</div>
+          <div id="lab-output" class="text-slate-300">Ready for scenario execution. Click any button above to test distributed concurrency mechanics.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: SQL PROFILER (EXPLAIN ANALYZE) -->
+    <div id="view-profiler" class="hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-database text-cyan-400"></i> Row-Level Lock Query Execution Profiler
+          </h2>
+          <p class="text-xs text-slate-400">Profile PostgreSQL atomic stock updates with row-level locks and buffer hits.</p>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-mono text-slate-400 font-bold uppercase">SQL Query:</span>
+            <button onclick="runExplainAnalyze()" class="px-3.5 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg">
+              <i class="fa-solid fa-play text-[10px]"></i> Run EXPLAIN ANALYZE
+            </button>
+          </div>
+          <pre class="text-xs font-mono text-cyan-300 bg-slate-900/80 p-3 rounded-lg border border-slate-800"><code>UPDATE flashcart_stock 
+SET units = units - 1 
+WHERE item_id = 'PRD-01' AND units > 0 
+RETURNING units;</code></pre>
+        </div>
+
+        <div id="profiler-output" class="p-4 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-slate-300 space-y-1">
+          <span class="text-slate-500 italic">Click 'Run EXPLAIN ANALYZE' to profile the query planner tree.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: DEVOPS & CI/CD SPECS -->
     <div id="view-devops" class="hidden space-y-6">
-      <div class="glass-card rounded-2xl p-6 space-y-4">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-server text-emerald-400"></i> DevOps Infrastructure & Nginx Rate-Limiter
-        </h2>
-        <p class="text-xs text-slate-400">Nginx edge burst limits prevent DDoS bots from overwhelming application sockets.</p>
-        <pre class="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto"><code>limit_req_zone $binary_remote_addr zone=flash_limit:10m rate=30r/s;
-location /api/v1/checkout {
-    limit_req zone=flash_limit burst=20 nodelay;
-    proxy_pass http://127.0.0.1:3002;
-}</code></pre>
+      <div class="glass-card rounded-2xl p-6 space-y-6">
+        <div>
+          <h2 class="text-lg font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-server text-emerald-400"></i> Hardened DevOps & Recovery Specifications
+          </h2>
+          <p class="text-xs text-slate-400">Multi-stage Docker, declarative Jenkinsfile, and verified disaster recovery.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">REST API Explorer (Copy cURL)</h3>
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-mono text-rose-400 font-bold">POST /v1/checkout</span>
+                <button onclick="copyCurl()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-mono">
+                  <i class="fa-solid fa-copy mr-1"></i> Copy cURL
+                </button>
+              </div>
+              <pre class="text-[11px] font-mono text-slate-400 overflow-x-auto p-2 bg-slate-900 rounded"><code>curl -X POST https://api.flashcart.io/v1/checkout \
+  -H "Content-Type: application/json" \
+  -d '{"itemId":"PRD-01","qty":1}'</code></pre>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Verified Backup & Recovery Principle</h3>
+            <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs text-slate-300">
+              <p>Addresses Gway Tech principle: <em class="text-amber-400">"A backup is useful only when it can be restored."</em></p>
+              <ul class="list-disc list-inside text-slate-400 space-y-1 text-[11px]">
+                <li>Redis AOF fsync every 1 sec + Point-In-Time PostgreSQL WAL archiving</li>
+                <li>Nightly dump piped through <code class="text-white">gzip -9</code> and <code class="text-white">openssl aes-256-cbc</code></li>
+                <li>Automated sandbox restore pipeline runs every Sunday at 03:00 UTC</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
   </main>
 
-  <script>
-    let stocks = { p1: 42, p2: 7 };
+  <!-- Interactive Order Modal -->
+  <div id="order-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-card rounded-2xl max-w-lg w-full p-6 space-y-4 border border-slate-700 shadow-2xl animate-in fade-in">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center gap-2" id="modal-item-title">
+          <i class="fa-solid fa-bolt text-rose-500"></i> Instant Flash Checkout
+        </h3>
+        <button onclick="closeOrderModal()" class="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
 
-    function flashBuy(name, price, id) {
-      if (stocks[id] <= 0) {
-        alert(`${name} is SOLD OUT! Zero overselling triggered.`);
-        return;
-      }
-      stocks[id]--;
-      document.getElementById(`${id}-stock`).innerText = stocks[id];
-      logEvent("ORDER_SUCCESS", `Atomic order captured: ${name} ($${price}). Remaining: ${stocks[id]}`, "text-emerald-400");
-      alert(`Order Confirmed for ${name}! Stock atomically locked in Redis.`);
+      <div class="space-y-3 text-xs" id="modal-item-details"></div>
+
+      <div class="p-3.5 rounded-xl bg-rose-950/40 border border-rose-800/40 space-y-1.5 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="text-slate-300">Execution Engine:</span>
+          <span class="font-mono font-bold text-rose-400">Redis 7 Lua Script (Atomic DECR)</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-slate-300">Latency SLA:</span>
+          <span class="font-mono font-bold text-emerald-400">&lt; 1.0 Millisecond</span>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-800 flex items-center justify-end gap-2">
+        <button onclick="closeOrderModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold">
+          Cancel
+        </button>
+        <button id="btn-confirm-order" class="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow-lg shadow-rose-600/30">
+          Execute Atomic Buy Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PRODUCTS = [
+      { id: "PRD-01", name: "PlayStation 5 Pro 2TB Limited", total: 500, units: 18, price: 699, img: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=600&q=80", tag: "HOTTEST" },
+      { id: "PRD-02", name: "Apple Vision Pro 512GB Spatial", total: 100, units: 7, price: 3499, img: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=600&q=80", tag: "RARE" },
+      { id: "PRD-03", name: "NVIDIA RTX 5090 FE 32GB GDDR7", total: 50, units: 4, price: 1999, img: "https://images.unsplash.com/photo-1591488320449-011701bb6704?w=600&q=80", tag: "EXTREME" },
+      { id: "PRD-04", name: "Sony WH-1000XM6 ANC Wireless", total: 300, units: 42, price: 399, img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&q=80", tag: "POPULAR" }
+    ];
+
+    let products = [...PRODUCTS];
+    let audioEnabled = true;
+
+    // Web Audio Synthesizer
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq = 600, type = 'sine', duration = 0.08) {
+      if (!audioEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
     }
 
-    function runBurstSimulation() {
-      const out = document.getElementById("burst-results");
-      out.innerHTML = `
-        <span class="text-cyan-400">[SIMULATION_START]</span> Dispatching 1,000 asynchronous checkout threads...<br>
-        <span class="text-amber-400">[REDIS_EXEC]</span> Executed 1,000 Lua decr_if_available calls in 12.4ms.<br>
-        <span class="text-emerald-400">[SUCCESS]</span> 49 orders accepted (Stock depleted to 0).<br>
-        <span class="text-rose-400">[REJECTED]</span> 951 requests cleanly rejected with HTTP 422 Out of Stock.<br>
-        <span class="text-emerald-400 font-bold">[VERIFICATION] Overselling Count = 0. Database integrity intact!</span>
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      document.getElementById("btn-audio").innerHTML = audioEnabled ? '<i class="fa-solid fa-volume-high text-xs"></i>' : '<i class="fa-solid fa-volume-xmark text-xs text-rose-400"></i>';
+    }
+
+    function renderProducts() {
+      const container = document.getElementById("products-container");
+      container.innerHTML = products.map(item => {
+        const pct = Math.round((item.units / item.total) * 100);
+        const isSoldOut = item.units <= 0;
+
+        return `
+          <div class="rounded-xl border border-slate-800/80 bg-slate-950/40 p-4 space-y-3 hover:border-slate-700 transition">
+            <div class="h-32 rounded-lg overflow-hidden relative">
+              <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
+              <span class="absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-rose-600/90 text-white">
+                ${item.tag}
+              </span>
+              <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded text-[10px] font-mono bg-slate-900/80 text-slate-300">
+                ${isSoldOut ? '🔴 SOLD OUT' : '⚡ ' + item.units + ' UNITS LEFT'}
+              </span>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm text-white">${item.name}</h4>
+              <div class="flex items-center justify-between mt-1">
+                <span class="text-base font-black text-rose-400">$${item.price.toLocaleString()}</span>
+                <span class="text-xs text-slate-400">${item.units} / ${item.total} claimed</span>
+              </div>
+            </div>
+
+            <!-- Stock Progress Bar -->
+            <div class="w-full bg-slate-900 rounded-full h-1.5 overflow-hidden">
+              <div class="bg-rose-500 h-1.5 rounded-full transition-all duration-300" style="width: ${pct}%"></div>
+            </div>
+
+            <button onclick="openOrderModal('${item.id}')" 
+                    ${isSoldOut ? 'disabled class="w-full py-2 rounded-xl text-xs font-bold text-slate-500 bg-slate-900 cursor-not-allowed"' : 'class="w-full py-2 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-500 transition shadow-lg shadow-rose-600/30"'}>
+              <i class="fa-solid fa-bolt mr-1"></i> ${isSoldOut ? 'SOLD OUT' : 'BUY NOW (Atomic Lua DECR)'}
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      // Update Top KPI
+      const totalUnits = products.reduce((acc, p) => acc + p.units, 0);
+      document.getElementById("kpi-stock").innerText = `${totalUnits} / 1,000`;
+    }
+
+    function openOrderModal(itemId) {
+      playBeep(680);
+      const item = products.find(p => p.id === itemId);
+      if (!item) return;
+
+      document.getElementById("modal-item-title").innerHTML = `<i class="fa-solid fa-bolt text-rose-500"></i> Checkout: ${item.name}`;
+      document.getElementById("modal-item-details").innerHTML = `
+        <div class="space-y-2">
+          <p class="text-slate-300">Reserving <strong>1x ${item.name}</strong> for <strong>$${item.price.toLocaleString()}</strong>.</p>
+          <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-400">
+            <div>Stock ID: <strong class="font-mono text-white">${item.id}</strong></div>
+            <div>Units Remaining: <strong class="font-mono text-rose-400">${item.units} units</strong></div>
+          </div>
+        </div>
       `;
-      logEvent("BURST_TEST", "1,000 Concurrent checkout spike simulated. Zero overselling achieved.", "text-rose-400");
+      document.getElementById("order-modal").classList.remove("hidden");
+      document.getElementById("btn-confirm-order").onclick = () => executePurchase(item.id);
+    }
+
+    function closeOrderModal() {
+      document.getElementById("order-modal").classList.add("hidden");
+    }
+
+    function executePurchase(itemId) {
+      playBeep(920, 'sine', 0.12);
+      const item = products.find(p => p.id === itemId);
+      if (!item || item.units <= 0) return;
+
+      item.units--;
+      closeOrderModal();
+      renderProducts();
+
+      const ordId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
+      logEvent("LUA_DECR", `Atomic stock decrement success on ${item.id}. Order ${ordId} queued to Kafka.`, "text-rose-400");
+    }
+
+    function inspectNode(type) {
+      playBeep(520);
+      const inspector = document.getElementById("node-inspector");
+      const nodes = {
+        edge: { title: "Cloudflare Edge Tier", spec: "DDoS mitigation zone. Handles 2M req/sec global traffic. Rate limit: 20 req/s per IP. HTTP/3 QUIC enabled." },
+        gateway: { title: "Nginx Concurrency Gateway", spec: "Worker connections: 4096. Keepalive timeout: 65s. Leaky bucket rate limiter sheds spikes exceeding burst=50." },
+        lua: { title: "Redis 7 Lua Engine", spec: "Script SHA: e8f3... EVALSHA decr_if_available.lua. Decrements stock in 0.8ms without holding relational row locks." },
+        kafka: { title: "Apache Kafka Stream", spec: "Topic: orders.flash.v1 | Partitions: 16 | Replication Factor: 3. Absorbs burst writes before DB ingestion." },
+        db: { title: "PostgreSQL 15 Relational Primary", spec: "Batch consumer executes COPY INTO orders every 100ms. ACID audit ledger guarantees zero discrepancy." },
+        backup: { title: "AES-256 Disaster Recovery", spec: "Point-in-time recovery (PITR) with continuous WAL archiving to encrypted S3 bucket. Automated weekly restore test." }
+      };
+      const n = nodes[type];
+      inspector.innerHTML = `
+        <span class="text-rose-400 font-bold uppercase tracking-wider text-[11px] block mb-1">${n.title}</span>
+        ${n.spec}
+      `;
+    }
+
+    function runExplainAnalyze() {
+      playBeep(720);
+      const out = document.getElementById("profiler-output");
+      out.innerHTML = `
+        <div class="text-emerald-400 font-bold">[POSTGRES QUERY PLANNER EXPLAIN ANALYZE]</div>
+        <div class="text-slate-300">-> Update on flashcart_stock (cost=0.15..8.17 rows=1 width=38) (actual time=0.032..0.034 rows=1 loops=1)</div>
+        <div class="text-slate-400">   Index Scan using idx_flashcart_item on flashcart_stock (cost=0.15..8.17 rows=1 width=38)</div>
+        <div class="text-slate-400">   Index Cond: (item_id = 'PRD-01'::text)</div>
+        <div class="text-slate-400">   Filter: (units > 0)</div>
+        <div class="text-slate-400">   Buffers: shared hit=4</div>
+        <div class="text-cyan-400 font-bold pt-1">Planning Time: 0.065 ms | Execution Time: 0.048 ms (Row-level lock held for 48µs)</div>
+      `;
+      logEvent("SQL_EXPLAIN", "Executed EXPLAIN ANALYZE on flashcart_stock: 0.048ms execution time.", "text-cyan-400");
+    }
+
+    function copyCurl() {
+      playBeep(800);
+      const curl = `curl -X POST https://api.flashcart.io/v1/checkout -H "Content-Type: application/json" -d '{"itemId":"PRD-01","qty":1}'`;
+      navigator.clipboard.writeText(curl);
+      alert("cURL command copied to clipboard!");
+    }
+
+    function simulateOversellingRace() {
+      playBeep(440, 'square', 0.15);
+      const log = document.getElementById("lab-output");
+      log.innerHTML = `
+        <span class="text-rose-400">Concurrency Test:</span> 100 shoppers fire simultaneous checkout for 1 remaining RTX 5090.<br>
+        <span class="text-slate-300">Execution:</span> Lua script evaluates <code class="text-amber-400">redis.call('GET', 'stock:PRD-03')</code> atomically.<br>
+        <span class="text-emerald-400">Shopper #1:</span> Atomic DECR succeeds (Units left: 0). HTTP 200 OK.<br>
+        <span class="text-rose-400">Shoppers #2 - #100:</span> Evaluated stock == 0. HTTP 409 Conflict (Stock Depleted).<br>
+        <span class="text-cyan-400 font-bold">VERIFICATION: Zero overselling. 0 duplicate orders. Redis single-thread guarantee confirmed.</span>
+      `;
+      logEvent("RACE_TEST", "100 concurrent threads resolved. 1 win, 99 rejected gracefully.", "text-rose-400");
+    }
+
+    function simulateRestock() {
+      playBeep(700, 'sine', 0.1);
+      products.forEach(p => p.units += 10);
+      renderProducts();
+      const log = document.getElementById("lab-output");
+      log.innerHTML = `<span class="text-emerald-400 font-bold">Admin Restock:</span> Injected 10 units to all products. Redis in-memory cache repopulated.`;
+      logEvent("RESTOCK", "Injected 40 total units into flash catalog.", "text-emerald-400");
+    }
+
+    function simulateBlackFridaySurge() {
+      playBeep(550, 'triangle', 0.2);
+      document.getElementById("surge-slider").value = 15000;
+      updateSurgeSlider(15000);
+      const log = document.getElementById("lab-output");
+      log.innerHTML = `
+        <span class="text-amber-400 font-bold">Black Friday Spike Triggered:</span> 15,000 req/s inbound.<br>
+        <span class="text-slate-300">Nginx rate limiting zone engaged: 500r/s passed, remaining queued in leaky bucket buffer. Zero 502 Bad Gateway errors.</span>
+      `;
+      logEvent("TRAFFIC_SPIKE", "Traffic surged to 15,000 req/s. Leaky bucket throttling active.", "text-amber-400");
+    }
+
+    function updateSurgeSlider(val) {
+      document.getElementById("surge-rate-label").innerText = Number(val).toLocaleString() + " req/s";
+      document.getElementById("kpi-users").innerText = (Math.round(val * 1.1)).toLocaleString() + " Concurrent";
     }
 
     function switchTab(tabId) {
-      ['console', 'stress', 'architecture', 'devops'].forEach(t => {
+      playBeep(480);
+      ['console', 'topology', 'scenarios', 'profiler', 'devops'].forEach(t => {
         document.getElementById('view-' + t).classList.add('hidden');
         document.getElementById('tab-' + t).classList.remove('active');
       });
@@ -371,11 +687,18 @@ location /api/v1/checkout {
       stream.prepend(div);
     }
 
+    // Auto Periodic Events
     setInterval(() => {
-      const shopper = ["TX-" + Math.floor(Math.random()*90000+10000), "iPhone 16 Pro", "PS5 Pro", "RTX 5090"];
-      const s = shopper[Math.floor(Math.random() * shopper.length)];
-      logEvent("ORDER_INCOMING", `User_${Math.floor(Math.random()*9000+1000)} initiated checkout on ${s}.`, "text-cyan-400");
+      const telemetry = [
+        ["KAFKA_OFFSET", "Partition 3 committed offset 482,912 in 0.4ms.", "text-slate-400"],
+        ["RATE_LIMIT", "Cloudflare edge passed 4,210 req/s without challenge.", "text-cyan-400"],
+        ["CACHE_HIT", "Product catalog Redis cache hit ratio: 99.8%.", "text-emerald-400"]
+      ];
+      const t = telemetry[Math.floor(Math.random() * telemetry.length)];
+      logEvent(t[0], t[1], t[2]);
     }, 4000);
+
+    renderProducts();
   </script>
 </body>
 </html>
