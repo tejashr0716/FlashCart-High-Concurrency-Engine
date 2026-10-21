@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flashcart-service
+  namespace: production
+  labels:
+    app: flashcart-engine
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 3002
+      protocol: TCP
+      name: http
+  selector:
+    app: flashcart-engine
